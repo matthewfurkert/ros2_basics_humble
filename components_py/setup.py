@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'actions_py'
+package_name = 'components_py'
 
 setup(
     name=package_name,
@@ -13,19 +13,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='furky',
-    maintainer_email='furky@todo.todo',
+    maintainer='ed',
+    maintainer_email='todo.todo@todo.com',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "count_until_server = actions_py.count_until_server:main",
-            "count_until_client = actions_py.count_until_client:main",
-            "move_robot_server = actions_py.move_robot_server:main",
-            "move_robot_client = actions_py.move_robot_client:main",
-            "move_robot_lifecycle_server = actions_py.move_robot_lifecycle_server:main",
-            "lifecycle_node_manager = actions_py.lifecycle_node_manager:main",
+            "manual_composition = components_py.manual_composition:main"
         ],
     },
 )

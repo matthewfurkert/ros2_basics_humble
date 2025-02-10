@@ -10,11 +10,9 @@ from my_robot_interfaces.msg import CancelMove
 class MoveRobotClientNode(Node): # MODIFY NAME
     def __init__(self):
         super().__init__("move_robot_client") # MODIFY NAME
+        self.goal_handle_ = None
         self.subscriber_ = self.create_subscription(CancelMove, "cancel_move", self.cancel_goal, 10)
-        self.move_robot_client_ = ActionClient(
-            self,
-            MoveRobot,
-            "move_robot")
+        self.move_robot_client_ = ActionClient(self, MoveRobot, "move_robot")
     
     def send_goal(self, position, velocity):
         # Wait for server
@@ -34,13 +32,10 @@ class MoveRobotClientNode(Node): # MODIFY NAME
             send_goal_async(goal, feedback_callback=self.goal_feedback_callback). \
             add_done_callback(self.goal_response_callback)
         
-        # Send a cancel request 2 seconds later
-        # self.timer_ = self.create_timer(2.0, self.cancel_goal)
-        
     def cancel_goal(self, msg):
-        self.get_logger().info("Sending a cancel request")
-        self.goal_handle_.cancel_goal_async()
-        # self.timer_.cancel()
+        if self.goal_handle_ is not None and self.goal_handle_.status == GoalStatus.STATUS_EXECUTING:
+            self.get_logger().info("Sending a cancel request")
+            self.goal_handle_.cancel_goal_async()
     
     def goal_response_callback(self, future):
         self.goal_handle_: ClientGoalHandle = future.result()
